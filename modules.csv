@@ -1,0 +1,5 @@
+import_module_name, pip_module_name
+PIL, Pillow
+speedtest, speedtest-cli
+Stemmer, PyStemmer
+sklearn, scikit-learn
