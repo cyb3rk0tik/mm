@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from argparse import ArgumentParser
-import pkgutil, csv
+import pkgutil, csv, os
 
 
 def get_modules():
@@ -63,13 +63,24 @@ def forming_requirements(unique_list):
         requirements = '\n'.join(unique_list)
         file.write(requirements)
     return requirements
-  
+
+def forming_list(replace_list):
+    if isinstance(replace_list, str):
+        pass
+    else:
+        replace_list = ' '.join(replace_list)
+    return replace_list
+    
 def main():
     parser = ArgumentParser()
     
     parser.add_argument("--requirements", "-r",
                         action="store_true", dest="req", default=False,
                         help="Create requirements.txt file from script.")
+    
+    parser.add_argument("--install", "-i",
+                        action="store_true", dest="ins", default=False,
+                        help="Autoinstall import modules.")
                         
     parser.add_argument("--file", "-f",
                         dest="filename", help="Python file to check import modules.")
@@ -86,8 +97,9 @@ def main():
                 forming_requirements(replace_list)
                 print('File requirements was created.\nUse pip install -r requirements.txt')
             else:
-                replace_list = ' '.join(replace_list)
-                print('Formed list modules, use for install:\npip install ' + replace_list)
+                print('Formed list modules, use for install:\npip install ' + forming_list(replace_list))
+            if args.ins:
+                os.system('pip install ' + forming_list(replace_list))
         else:
             print('No missing modules')
 if __name__ == "__main__":
